@@ -6,133 +6,152 @@
 <title>Image To PDF Converter</title>
 
 <style>
-    *{
-        margin:0;
-        padding:0;
-        box-sizing:border-box;
-        font-family:Arial, sans-serif;
-    }
 
-    body{
-        background:#111;
-        color:white;
-        height:100vh;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-    }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
 
-    .container{
-        width:400px;
-        background:#1e1e1e;
-        padding:30px;
-        border-radius:15px;
-        text-align:center;
-        box-shadow:0 0 20px rgba(0,255,150,0.3);
-    }
+body{
+    background:#111;
+    color:white;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
 
-    h1{
-        margin-bottom:20px;
-        color:#00ff99;
-    }
+.container{
+    width:400px;
+    background:#1e1e1e;
+    padding:30px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 0 20px rgba(0,255,150,0.3);
+}
 
-    input{
-        margin:20px 0;
-        color:white;
-    }
+h1{
+    margin-bottom:20px;
+    color:#00ff99;
+}
 
-    button{
-        padding:12px 25px;
-        border:none;
-        background:#00ff99;
-        color:black;
-        font-size:18px;
-        border-radius:8px;
-        cursor:pointer;
-        transition:0.3s;
-    }
+input{
+    margin:20px 0;
+    color:white;
+}
 
-    button:hover{
-        transform:scale(1.05);
-    }
+button{
+    padding:12px 25px;
+    border:none;
+    background:#00ff99;
+    color:black;
+    font-size:18px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:0.3s;
+}
 
-    img{
-        width:100%;
-        margin-top:20px;
-        border-radius:10px;
-        display:none;
-    }
+button:hover{
+    transform:scale(1.05);
+}
+
+img{
+    width:100%;
+    margin-top:20px;
+    border-radius:10px;
+    display:none;
+}
+
 </style>
 </head>
 <body>
 
 <div class="container">
+
     <h1>Image To PDF</h1>
 
     <input type="file" id="imageInput" accept="image/*">
 
     <br>
 
-    <button onclick="convertToPDF()">Convert To PDF</button>
+    <button onclick="convertToPDF()">
+        Convert To PDF
+    </button>
 
     <img id="preview">
+
 </div>
 
-<!-- jsPDF Library -->
+<!-- jsPDF CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
-    let selectedImage = null;
 
-    const imageInput = document.getElementById("imageInput");
-    const preview = document.getElementById("preview");
+let selectedImage = null;
 
-    imageInput.addEventListener("change", function(e){
+const imageInput = document.getElementById("imageInput");
+const preview = document.getElementById("preview");
 
-        const file = e.target.files[0];
+imageInput.addEventListener("change", function(e){
 
-        if(file){
+    const file = e.target.files[0];
 
-            const reader = new FileReader();
+    if(file){
 
-            reader.onload = function(event){
+        const reader = new FileReader();
 
-                selectedImage = event.target.result;
+        reader.onload = function(event){
 
-                preview.src = selectedImage;
-                preview.style.display = "block";
-            }
+            selectedImage = event.target.result;
 
-            reader.readAsDataURL(file);
-        }
-    });
+            preview.src = selectedImage;
 
-    function convertToPDF(){
-
-        if(!selectedImage){
-            alert("Please select an image first");
-            return;
+            preview.style.display = "block";
         }
 
-        const { jsPDF } = window.jspdf;
-
-        const pdf = new jsPDF();
-
-        const img = new Image();
-
-        img.src = selectedImage;
-
-        img.onload = function(){
-
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-
-            const pdfHeight = (img.height * pdfWidth) / img.width;
-
-            pdf.addImage(selectedImage, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-
-            pdf.save("converted.pdf");
-        }
+        reader.readAsDataURL(file);
     }
+
+});
+
+function convertToPDF(){
+
+    if(!selectedImage){
+
+        alert("Please select an image first");
+
+        return;
+    }
+
+    const { jsPDF } = window.jspdf;
+
+    const pdf = new jsPDF();
+
+    const img = new Image();
+
+    img.src = selectedImage;
+
+    img.onload = function(){
+
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+
+        const pdfHeight = (img.height * pdfWidth) / img.width;
+
+        pdf.addImage(selectedImage, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+
+        // ORIGINAL IMAGE NAME
+        const originalName = imageInput.files[0].name
+            .split('.')
+            .slice(0, -1)
+            .join('.');
+
+        // SAVE PDF WITH SAME NAME
+        pdf.save(originalName + ".pdf");
+    }
+}
+
 </script>
 
 </body>
