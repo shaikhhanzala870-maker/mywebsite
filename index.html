@@ -3,81 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate IPL Fan Tester 😂</title>
+    <title>IPL 2026 Fan Rewards 😂</title>
     <style>
         body {
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
             color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             text-align: center;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: 2.8rem;
+            margin-top: 20px;
             margin-bottom: 10px;
             text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+            color: #FFD700;
         }
 
         p {
             font-size: 1.2rem;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             color: #ddd;
         }
 
-        .button-container {
-            display: flex;
-            gap: 30px;
+        /* Grid for all 10 teams */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 900px;
+            padding: 0 20px 40px 20px;
         }
 
-        button {
-            padding: 20px 40px;
-            font-size: 1.5rem;
+        @media (min-width: 768px) {
+            .grid-container {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        button.team-btn {
+            padding: 15px 10px;
+            font-size: 1.1rem;
             font-weight: bold;
-            border: none;
-            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
             cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
         }
 
-        button:hover {
+        button.team-btn:hover {
             transform: translateY(-5px) scale(1.05);
         }
 
-        .csk-btn {
-            background: linear-gradient(45deg, #F9CD05, #FFD700);
-            color: #000;
-            border: 3px solid #00529B;
-        }
-
-        .csk-btn:hover {
-            box-shadow: 0 10px 30px rgba(249, 205, 5, 0.6);
-        }
-
-        .rcb-btn {
-            background: linear-gradient(45deg, #E32636, #8B0000);
-            color: #FFD700;
-            border: 3px solid #000;
-        }
-
-        .rcb-btn:hover {
-            box-shadow: 0 10px 30px rgba(227, 38, 54, 0.6);
-        }
+        /* Team Colors */
+        .rcb-btn { background: linear-gradient(45deg, #E32636, #000000); color: #FFD700; }
+        .csk-btn { background: linear-gradient(45deg, #F9CD05, #FF8C00); color: #000; text-shadow: none !important;}
+        .mi-btn  { background: linear-gradient(45deg, #004BA0, #001A33); color: #FFF; }
+        .lsg-btn { background: linear-gradient(45deg, #00008B, #8B0000); color: #FF8C00; }
+        .pbks-btn{ background: linear-gradient(45deg, #ED1B24, #A11A21); color: #FFF; }
+        .srh-btn { background: linear-gradient(45deg, #F26522, #000000); color: #FFF; }
+        .gt-btn  { background: linear-gradient(45deg, #1B2133, #0A0D14); color: #FFD700; }
+        .rr-btn  { background: linear-gradient(45deg, #EA1A85, #001A33); color: #FFF; }
+        .dc-btn  { background: linear-gradient(45deg, #00008B, #E32636); color: #FFF; }
+        .kkr-btn { background: linear-gradient(45deg, #3A225D, #110A1C); color: #FFD700; }
 
         /* Modal Styles */
         #result-modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.9);
             justify-content: center;
             align-items: center;
             flex-direction: column;
@@ -91,79 +100,128 @@
         }
 
         #message-display {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: bold;
             margin-bottom: 30px;
-            padding: 0 20px;
+            padding: 0 40px;
             text-align: center;
+            line-height: 1.4;
+            max-width: 800px;
         }
 
         .close-btn {
-            padding: 10px 30px;
+            padding: 12px 35px;
             font-size: 1.2rem;
             background: #fff;
             color: #000;
+            font-weight: bold;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
         }
 
         /* Animations */
-        @keyframes popIn {
-            0% { transform: scale(0); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .spin {
-            animation: spin 3s linear infinite;
-        }
-
-        .swing {
-            animation: swing 2s ease-in-out infinite alternate;
-        }
+        @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .spin { animation: spin 3s linear infinite; }
+        .swing { animation: swing 2s ease-in-out infinite alternate; }
+        .bounce { animation: bounce 1s infinite alternate; }
+        .shake { animation: shake 0.5s infinite; }
 
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes swing { 
-            0% { transform: rotate(-20deg); }
-            100% { transform: rotate(20deg); }
+        @keyframes swing { 0% { transform: rotate(-20deg); } 100% { transform: rotate(20deg); } }
+        @keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-20px); } }
+        @keyframes shake { 
+            0%, 100% { transform: translateX(0); } 
+            25% { transform: translateX(-10px) rotate(-5deg); } 
+            75% { transform: translateX(10px) rotate(5deg); } 
         }
     </style>
 </head>
 <body>
 
-    <h1>🏏 The Ultimate Fan Reward 🏏</h1>
-    <p>Choose your favorite team to claim your ultimate prize!</p>
+    <h1>🏏 IPL 2026 Reality Check 🏏</h1>
+    <p>Select your team to see your actual reward based on the 2026 Points Table!</p>
 
-    <div class="button-container">
-        <button class="csk-btn" onclick="showResult('csk')">💛 I am a CSK Fan</button>
-        <button class="rcb-btn" onclick="showResult('rcb')">❤️ I am an RCB Fan</button>
+    <div class="grid-container">
+        <!-- Team Buttons -->
+        <button class="team-btn rcb-btn" onclick="showResult('rcb')">❤️ RCB</button>
+        <button class="team-btn csk-btn" onclick="showResult('csk')">💛 CSK</button>
+        <button class="team-btn gt-btn"  onclick="showResult('gt')">⚡ GT</button>
+        <button class="team-btn srh-btn" onclick="showResult('srh')">🦅 SRH</button>
+        <button class="team-btn pbks-btn"onclick="showResult('pbks')">🦁 PBKS</button>
+        <button class="team-btn rr-btn"  onclick="showResult('rr')">👑 RR</button>
+        <button class="team-btn dc-btn"  onclick="showResult('dc')">🐯 DC</button>
+        <button class="team-btn kkr-btn" onclick="showResult('kkr')">💜 KKR</button>
+        <button class="team-btn mi-btn"  onclick="showResult('mi')">🌪️ MI</button>
+        <button class="team-btn lsg-btn" onclick="showResult('lsg')">🏹 LSG</button>
     </div>
 
     <!-- Hidden Popup Modal -->
     <div id="result-modal">
         <div id="emoji-display"></div>
         <div id="message-display"></div>
-        <button class="close-btn" onclick="closeModal()">Play Again 🔄</button>
+        <button class="close-btn" onclick="closeModal()">Try Another Team 🔄</button>
     </div>
 
     <script>
+        // Database of 2026 team performances and jokes!
+        const teamData = {
+            rcb: { 
+                emoji: "🏆", anim: "spin", color: "#E32636", 
+                text: "Wait, RCB is at the TOP of the 2026 table?! Is this a parallel universe?<br>Ee Sala Cup Namde is actually happening! 😭❤️ Ye lo Trophy!" 
+            },
+            gt: { 
+                emoji: "🥥", anim: "swing", color: "#A7B6D4", 
+                text: "2nd Place! No Hardik, no problem. Ashish Nehra ji ka Coconut Water magic working full time! 😎" 
+            },
+            srh: { 
+                emoji: "🥘", anim: "bounce", color: "#F26522", 
+                text: "Qualified for Playoffs! Pat Cummins silencing crowds left and right.<br>Celebration mein Hyderabadi Biryani khao! 🔥" 
+            },
+            pbks: { 
+                emoji: "🥁", anim: "swing", color: "#ED1B24", 
+                text: "Wait... Punjab is actually 4th?! Preity Zinta is finally smiling!<br>Tension mat lo, ye lo Dhol bajao! 🕺💃" 
+            },
+            rr: { 
+                emoji: "🧮", anim: "shake", color: "#EA1A85", 
+                text: "From table toppers to 5th place! Now relying on NRR to qualify.<br>Ye lo Calculator aur baith ke hisaab lagao! 🤣" 
+            },
+            csk: { 
+                emoji: "🍭", anim: "swing", color: "#F9CD05", 
+                text: "Lost to SRH and stuck at 6th place? Dhoni bhai ko aur kitna rulaoge?<br>Playoffs door hai, chup chaap ye Lollipop khao! 🤫" 
+            },
+            dc: { 
+                emoji: "🍲", anim: "bounce", color: "#4A90E2", 
+                text: "7th Place! Pant is hitting well but bowlers are sleeping.<br>Bahar se playoffs dekho aur ye lo Chhole Bhature khao! 😅" 
+            },
+            kkr: { 
+                emoji: "🍨", anim: "swing", color: "#D4AF37", 
+                text: "8th Place? Ami KKR? More like Ami Bahar! Korbo Lorbo Haarbo!<br>Tension na lo, aaram se Rasgulla khao. 🙃" 
+            },
+            mi: { 
+                emoji: "🍔", anim: "bounce", color: "#004BA0", 
+                text: "9th Position?! Lagta hai Ambani ji ka Wi-Fi slow chal raha hai iss saal.<br>Ye lo ek Vada Pav khao aur agli saal aana! 😂" 
+            },
+            lsg: { 
+                emoji: "🧻", anim: "shake", color: "#FF8C00", 
+                text: "10th Place and Officially Eliminated! KL Rahul bhai ko thoda rest do.<br>Ye lo Tissues, aansu poch lo! 😭" 
+            }
+        };
+
         function showResult(team) {
             const modal = document.getElementById('result-modal');
             const emoji = document.getElementById('emoji-display');
             const message = document.getElementById('message-display');
 
-            if (team === 'csk') {
-                emoji.innerHTML = "🍭";
-                emoji.className = "swing"; // Gives the lollipop a swinging animation
-                message.innerHTML = "Aww! 5 Trophies bohot ho gayi...<br>Ab chup chaap ye Lollipop khao! 🤣";
-                message.style.color = "#F9CD05";
-            } else if (team === 'rcb') {
-                emoji.innerHTML = "🏆";
-                emoji.className = "spin"; // Gives the trophy a glowing spin animation
-                message.innerHTML = "EE SALA CUP NAMDE! 😭❤️<br>Lo bhai, finally ek virtual trophy toh mil hi gayi! 🎉";
-                message.style.color = "#E32636";
-            }
+            const data = teamData[team];
+            
+            // Set data
+            emoji.innerHTML = data.emoji;
+            emoji.className = data.anim; 
+            message.innerHTML = data.text;
+            message.style.color = data.color;
 
+            // Show modal
             modal.style.display = "flex";
         }
 
