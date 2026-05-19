@@ -3,232 +3,266 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPL 2026 Fan Rewards 😂</title>
+    <title>Infinity Subway Runner</title>
     <style>
         body {
             margin: 0;
             padding: 0;
+            background-color: #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            overflow: hidden;
+        }
+        #gameContainer {
+            position: relative;
+            width: 400px;
+            height: 600px;
+            background-color: #34495e;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        canvas {
+            display: block;
+        }
+        #ui {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 10;
+        }
+        #gameOver {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
             color: white;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            text-align: center;
-            overflow-x: hidden;
-        }
-
-        h1 {
-            font-size: 2.8rem;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
-            color: #FFD700;
-        }
-
-        p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            color: #ddd;
-        }
-
-        /* Grid for all 10 teams */
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            max-width: 900px;
-            padding: 0 20px 40px 20px;
-        }
-
-        @media (min-width: 768px) {
-            .grid-container {
-                grid-template-columns: repeat(5, 1fr);
-            }
-        }
-
-        button.team-btn {
-            padding: 15px 10px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-            display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 5px;
-        }
-
-        button.team-btn:hover {
-            transform: translateY(-5px) scale(1.05);
-        }
-
-        /* Team Colors */
-        .rcb-btn { background: linear-gradient(45deg, #E32636, #000000); color: #FFD700; }
-        .csk-btn { background: linear-gradient(45deg, #F9CD05, #FF8C00); color: #000; text-shadow: none !important;}
-        .mi-btn  { background: linear-gradient(45deg, #004BA0, #001A33); color: #FFF; }
-        .lsg-btn { background: linear-gradient(45deg, #00008B, #8B0000); color: #FF8C00; }
-        .pbks-btn{ background: linear-gradient(45deg, #ED1B24, #A11A21); color: #FFF; }
-        .srh-btn { background: linear-gradient(45deg, #F26522, #000000); color: #FFF; }
-        .gt-btn  { background: linear-gradient(45deg, #1B2133, #0A0D14); color: #FFD700; }
-        .rr-btn  { background: linear-gradient(45deg, #EA1A85, #001A33); color: #FFF; }
-        .dc-btn  { background: linear-gradient(45deg, #00008B, #E32636); color: #FFF; }
-        .kkr-btn { background: linear-gradient(45deg, #3A225D, #110A1C); color: #FFD700; }
-
-        /* Modal Styles */
-        #result-modal {
             display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            z-index: 1000;
+            z-index: 20;
         }
-
-        #emoji-display {
-            font-size: 8rem;
-            margin-bottom: 20px;
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        #gameOver h1 {
+            font-size: 48px;
+            margin: 0 0 20px 0;
+            color: #e74c3c;
         }
-
-        #message-display {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-bottom: 30px;
-            padding: 0 40px;
-            text-align: center;
-            line-height: 1.4;
-            max-width: 800px;
-        }
-
-        .close-btn {
-            padding: 12px 35px;
-            font-size: 1.2rem;
-            background: #fff;
-            color: #000;
-            font-weight: bold;
+        button {
+            padding: 15px 30px;
+            font-size: 20px;
+            background-color: #3498db;
+            color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 5px;
             cursor: pointer;
+            transition: background 0.3s;
         }
-
-        /* Animations */
-        @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-        .spin { animation: spin 3s linear infinite; }
-        .swing { animation: swing 2s ease-in-out infinite alternate; }
-        .bounce { animation: bounce 1s infinite alternate; }
-        .shake { animation: shake 0.5s infinite; }
-
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes swing { 0% { transform: rotate(-20deg); } 100% { transform: rotate(20deg); } }
-        @keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-20px); } }
-        @keyframes shake { 
-            0%, 100% { transform: translateX(0); } 
-            25% { transform: translateX(-10px) rotate(-5deg); } 
-            75% { transform: translateX(10px) rotate(5deg); } 
+        button:hover {
+            background-color: #2980b9;
+        }
+        .instructions {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
 
-    <h1>🏏 IPL 2026 Reality Check 🏏</h1>
-    <p>Select your team to see your actual reward based on the 2026 Points Table!</p>
-
-    <div class="grid-container">
-        <!-- Team Buttons -->
-        <button class="team-btn rcb-btn" onclick="showResult('rcb')">❤️ RCB</button>
-        <button class="team-btn csk-btn" onclick="showResult('csk')">💛 CSK</button>
-        <button class="team-btn gt-btn"  onclick="showResult('gt')">⚡ GT</button>
-        <button class="team-btn srh-btn" onclick="showResult('srh')">🦅 SRH</button>
-        <button class="team-btn pbks-btn"onclick="showResult('pbks')">🦁 PBKS</button>
-        <button class="team-btn rr-btn"  onclick="showResult('rr')">👑 RR</button>
-        <button class="team-btn dc-btn"  onclick="showResult('dc')">🐯 DC</button>
-        <button class="team-btn kkr-btn" onclick="showResult('kkr')">💜 KKR</button>
-        <button class="team-btn mi-btn"  onclick="showResult('mi')">🌪️ MI</button>
-        <button class="team-btn lsg-btn" onclick="showResult('lsg')">🏹 LSG</button>
+<div id="gameContainer">
+    <div id="ui">Score: <span id="score">0</span></div>
+    <canvas id="gameCanvas" width="400" height="600"></canvas>
+    <div class="instructions">Use Left and Right Arrow Keys to Move</div>
+    
+    <div id="gameOver">
+        <h1>Game Over!</h1>
+        <p>Final Score: <span id="finalScore">0</span></p>
+        <button onclick="resetGame()">Play Again</button>
     </div>
+</div>
 
-    <!-- Hidden Popup Modal -->
-    <div id="result-modal">
-        <div id="emoji-display"></div>
-        <div id="message-display"></div>
-        <button class="close-btn" onclick="closeModal()">Try Another Team 🔄</button>
-    </div>
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const scoreElement = document.getElementById('score');
+    const gameOverScreen = document.getElementById('gameOver');
+    const finalScoreElement = document.getElementById('finalScore');
 
-    <script>
-        // Database of 2026 team performances and jokes!
-        const teamData = {
-            rcb: { 
-                emoji: "🏆", anim: "spin", color: "#E32636", 
-                text: "Wait, RCB is at the TOP of the 2026 table?! Is this a parallel universe?<br>Ee Sala Cup Namde is actually happening! 😭❤️ Ye lo Trophy!" 
-            },
-            gt: { 
-                emoji: "🥥", anim: "swing", color: "#A7B6D4", 
-                text: "2nd Place! No Hardik, no problem. Ashish Nehra ji ka Coconut Water magic working full time! 😎" 
-            },
-            srh: { 
-                emoji: "🥘", anim: "bounce", color: "#F26522", 
-                text: "Qualified for Playoffs! Pat Cummins silencing crowds left and right.<br>Celebration mein Hyderabadi Biryani khao! 🔥" 
-            },
-            pbks: { 
-                emoji: "🥁", anim: "swing", color: "#ED1B24", 
-                text: "Wait... Punjab is actually 4th?! Preity Zinta is finally smiling!<br>Tension mat lo, ye lo Dhol bajao! 🕺💃" 
-            },
-            rr: { 
-                emoji: "🧮", anim: "shake", color: "#EA1A85", 
-                text: "From table toppers to 5th place! Now relying on NRR to qualify.<br>Ye lo Calculator aur baith ke hisaab lagao! 🤣" 
-            },
-            csk: { 
-                emoji: "🍭", anim: "swing", color: "#F9CD05", 
-                text: "Lost to SRH and stuck at 6th place? Dhoni bhai ko aur kitna rulaoge?<br>Playoffs door hai, chup chaap ye Lollipop khao! 🤫" 
-            },
-            dc: { 
-                emoji: "🍲", anim: "bounce", color: "#4A90E2", 
-                text: "7th Place! Pant is hitting well but bowlers are sleeping.<br>Bahar se playoffs dekho aur ye lo Chhole Bhature khao! 😅" 
-            },
-            kkr: { 
-                emoji: "🍨", anim: "swing", color: "#D4AF37", 
-                text: "8th Place? Ami KKR? More like Ami Bahar! Korbo Lorbo Haarbo!<br>Tension na lo, aaram se Rasgulla khao. 🙃" 
-            },
-            mi: { 
-                emoji: "🍔", anim: "bounce", color: "#004BA0", 
-                text: "9th Position?! Lagta hai Ambani ji ka Wi-Fi slow chal raha hai iss saal.<br>Ye lo ek Vada Pav khao aur agli saal aana! 😂" 
-            },
-            lsg: { 
-                emoji: "🧻", anim: "shake", color: "#FF8C00", 
-                text: "10th Place and Officially Eliminated! KL Rahul bhai ko thoda rest do.<br>Ye lo Tissues, aansu poch lo! 😭" 
+    // Game Variables
+    let animationId;
+    let score = 0;
+    let gameSpeed = 5;
+    let frameCount = 0;
+    let isGameOver = false;
+
+    // Lanes setup (3 lanes)
+    const laneWidth = canvas.width / 3;
+    const lanes = [laneWidth / 2, laneWidth * 1.5, laneWidth * 2.5];
+    let currentLane = 1; // Start in middle lane (0, 1, 2)
+
+    // Player Object
+    const player = {
+        y: canvas.height - 100,
+        width: 50,
+        height: 70,
+        color: '#2ecc71',
+        draw() {
+            ctx.fillStyle = this.color;
+            // Center the player in the current lane
+            const x = lanes[currentLane] - (this.width / 2);
+            ctx.fillRect(x, this.y, this.width, this.height);
+        }
+    };
+
+    // Obstacles Array
+    let obstacles = [];
+
+    class Obstacle {
+        constructor() {
+            this.lane = Math.floor(Math.random() * 3);
+            this.width = 60;
+            this.height = 60;
+            this.x = lanes[this.lane] - (this.width / 2);
+            this.y = -this.height;
+            this.color = '#e74c3c';
+        }
+
+        update() {
+            this.y += gameSpeed;
+            this.draw();
+        }
+
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+        }
+    }
+
+    // Input Handling
+    window.addEventListener('keydown', (e) => {
+        if (isGameOver) return;
+        
+        if (e.key === 'ArrowLeft' && currentLane > 0) {
+            currentLane--;
+        } else if (e.key === 'ArrowRight' && currentLane < 2) {
+            currentLane++;
+        }
+    });
+
+    // Touch support for mobile
+    let touchStartX = 0;
+    canvas.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+    canvas.addEventListener('touchend', e => {
+        if (isGameOver) return;
+        let touchEndX = e.changedTouches[0].screenX;
+        if (touchEndX < touchStartX - 30 && currentLane > 0) {
+            currentLane--; // Swipe left
+        } else if (touchEndX > touchStartX + 30 && currentLane < 2) {
+            currentLane++; // Swipe right
+        }
+    });
+
+    function spawnObstacles() {
+        // Spawn rate increases slightly as game speeds up
+        if (frameCount % Math.max(30, Math.floor(100 - gameSpeed * 2)) === 0) {
+            obstacles.push(new Obstacle());
+        }
+    }
+
+    function checkCollision(obstacle) {
+        const playerX = lanes[currentLane] - (player.width / 2);
+        
+        if (
+            playerX < obstacle.x + obstacle.width &&
+            playerX + player.width > obstacle.x &&
+            player.y < obstacle.y + obstacle.height &&
+            player.y + player.height > obstacle.y
+        ) {
+            gameOver();
+        }
+    }
+
+    function drawBackgroundLanes() {
+        ctx.fillStyle = '#7f8c8d';
+        ctx.fillRect(laneWidth - 2, 0, 4, canvas.height); // Left divider
+        ctx.fillRect(laneWidth * 2 - 2, 0, 4, canvas.height); // Right divider
+        
+        // Moving track lines
+        ctx.fillStyle = '#bdc3c7';
+        for(let i = 0; i < canvas.height; i += 60) {
+            let offset = (frameCount * gameSpeed) % 60;
+            ctx.fillRect(laneWidth - 4, i + offset - 60, 8, 30);
+            ctx.fillRect(laneWidth * 2 - 4, i + offset - 60, 8, 30);
+        }
+    }
+
+    function gameOver() {
+        isGameOver = true;
+        cancelAnimationFrame(animationId);
+        gameOverScreen.style.display = 'flex';
+        finalScoreElement.innerText = Math.floor(score);
+    }
+
+    function resetGame() {
+        score = 0;
+        gameSpeed = 5;
+        frameCount = 0;
+        obstacles = [];
+        currentLane = 1;
+        isGameOver = false;
+        gameOverScreen.style.display = 'none';
+        scoreElement.innerText = '0';
+        animate();
+    }
+
+    function animate() {
+        if (isGameOver) return;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        drawBackgroundLanes();
+        player.draw();
+        spawnObstacles();
+
+        // Update and draw obstacles
+        for (let i = obstacles.length - 1; i >= 0; i--) {
+            obstacles[i].update();
+            checkCollision(obstacles[i]);
+
+            // Remove off-screen obstacles and increase score
+            if (obstacles[i].y > canvas.height) {
+                obstacles.splice(i, 1);
             }
-        };
-
-        function showResult(team) {
-            const modal = document.getElementById('result-modal');
-            const emoji = document.getElementById('emoji-display');
-            const message = document.getElementById('message-display');
-
-            const data = teamData[team];
-            
-            // Set data
-            emoji.innerHTML = data.emoji;
-            emoji.className = data.anim; 
-            message.innerHTML = data.text;
-            message.style.color = data.color;
-
-            // Show modal
-            modal.style.display = "flex";
         }
 
-        function closeModal() {
-            const modal = document.getElementById('result-modal');
-            modal.style.display = "none";
+        // Score and difficulty scaling
+        score += 0.1;
+        scoreElement.innerText = Math.floor(score);
+        
+        if (frameCount % 600 === 0) { // Every ~10 seconds
+            gameSpeed += 0.5; // Gradually increase speed
         }
-    </script>
+
+        frameCount++;
+        animationId = requestAnimationFrame(animate);
+    }
+
+    // Start Game
+    animate();
+</script>
+
 </body>
 </html>
