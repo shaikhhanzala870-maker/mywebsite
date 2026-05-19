@@ -1,406 +1,400 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Match-3 Puzzle Game</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Match 3 Game</title>
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-      user-select: none;
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+    user-select:none;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#0f172a,#1e3a8a,#7e22ce);
+    overflow:hidden;
+}
+
+.game-container{
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(10px);
+    padding:20px;
+    border-radius:25px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.4);
+    text-align:center;
+}
+
+h1{
+    color:white;
+    margin-bottom:20px;
+    font-size:2.5rem;
+}
+
+.stats{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:20px;
+    gap:20px;
+}
+
+.stat-box{
+    background:rgba(255,255,255,0.12);
+    padding:12px 18px;
+    border-radius:15px;
+    color:white;
+    font-size:1.1rem;
+    font-weight:bold;
+    min-width:130px;
+}
+
+.board{
+    display:grid;
+    grid-template-columns:repeat(8,70px);
+    grid-template-rows:repeat(8,70px);
+    gap:6px;
+}
+
+.tile{
+    width:70px;
+    height:70px;
+    border-radius:18px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:2rem;
+    cursor:pointer;
+    transition:
+        transform 0.18s ease,
+        opacity 0.2s ease,
+        background 0.2s ease;
+    border:2px solid rgba(255,255,255,0.12);
+}
+
+.tile:hover{
+    transform:scale(1.05);
+}
+
+.selected{
+    border:3px solid white;
+    box-shadow:0 0 15px white;
+    transform:scale(1.1);
+}
+
+button{
+    margin-top:20px;
+    padding:12px 24px;
+    border:none;
+    border-radius:14px;
+    background:#22c55e;
+    color:white;
+    font-size:1rem;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.25s;
+}
+
+button:hover{
+    transform:scale(1.05);
+    background:#16a34a;
+}
+
+.game-over{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.85);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    z-index:999;
+}
+
+.game-over h2{
+    color:white;
+    font-size:3rem;
+    margin-bottom:15px;
+}
+
+.game-over p{
+    color:white;
+    font-size:1.4rem;
+    margin-bottom:20px;
+}
+
+@media(max-width:750px){
+
+    .board{
+        grid-template-columns:repeat(8,42px);
+        grid-template-rows:repeat(8,42px);
+        gap:4px;
     }
 
-    body {
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(135deg, #111827, #1e3a8a, #6d28d9);
-      overflow: hidden;
+    .tile{
+        width:42px;
+        height:42px;
+        font-size:1.2rem;
+        border-radius:10px;
     }
 
-    .game-container {
-      text-align: center;
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(10px);
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    h1{
+        font-size:2rem;
     }
 
-    h1 {
-      color: white;
-      margin-bottom: 15px;
-      font-size: 2.5rem;
+    .stat-box{
+        min-width:auto;
+        font-size:0.9rem;
     }
-
-    .stats {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      margin-bottom: 20px;
-      color: white;
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
-
-    .board {
-      display: grid;
-      grid-template-columns: repeat(8, 70px);
-      grid-template-rows: repeat(8, 70px);
-      gap: 5px;
-      justify-content: center;
-    }
-
-    .tile {
-      width: 70px;
-      height: 70px;
-      border-radius: 15px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 2rem;
-      cursor: pointer;
-      transition: transform 0.2s, opacity 0.2s;
-      border: 2px solid rgba(255,255,255,0.15);
-    }
-
-    .tile:hover {
-      transform: scale(1.05);
-    }
-
-    .selected {
-      border: 3px solid #fff;
-      box-shadow: 0 0 15px white;
-    }
-
-    .hidden {
-      opacity: 0;
-      transform: scale(0);
-    }
-
-    button {
-      margin-top: 20px;
-      padding: 12px 25px;
-      border: none;
-      border-radius: 12px;
-      background: #22c55e;
-      color: white;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      background: #16a34a;
-      transform: scale(1.05);
-    }
-
-    .game-over {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      color: white;
-      z-index: 100;
-      display: none;
-    }
-
-    .game-over h2 {
-      font-size: 3rem;
-      margin-bottom: 15px;
-    }
-
-    .game-over p {
-      font-size: 1.5rem;
-      margin-bottom: 20px;
-    }
-
-    @media (max-width: 700px) {
-      .board {
-        grid-template-columns: repeat(8, 42px);
-        grid-template-rows: repeat(8, 42px);
-      }
-
-      .tile {
-        width: 42px;
-        height: 42px;
-        font-size: 1.2rem;
-      }
-    }
-  </style>
+}
+</style>
 </head>
 
 <body>
 
-  <div class="game-container">
-    <h1>🍬 Match-3 Puzzle</h1>
+<div class="game-container">
+
+    <h1>🍬 Match 3 Puzzle</h1>
 
     <div class="stats">
-      <div>⭐ Score: <span id="score">0</span></div>
-      <div>🎯 Moves: <span id="moves">30</span></div>
+        <div class="stat-box">
+            ⭐ Score: <span id="score">0</span>
+        </div>
+
+        <div class="stat-box">
+            🎯 Moves: <span id="moves">30</span>
+        </div>
     </div>
 
     <div class="board" id="board"></div>
 
     <button onclick="restartGame()">Restart Game</button>
-  </div>
 
-  <div class="game-over" id="gameOver">
+</div>
+
+<div class="game-over" id="gameOver">
     <h2>Game Over</h2>
-    <p>Your Score: <span id="finalScore"></span></p>
+    <p>Your Score: <span id="finalScore">0</span></p>
     <button onclick="restartGame()">Play Again</button>
-  </div>
+</div>
 
 <script>
-/*
-====================================================
-MATCH-3 PUZZLE GAME
-Built with Vanilla JavaScript
-====================================================
-You can easily replace emojis with:
-- Images
-- SVGs
-- Custom sprites
-====================================================
-*/
 
-const board = document.getElementById("board");
+/*
+=========================================
+MATCH 3 GAME
+HTML + CSS + VANILLA JS
+=========================================
+*/
 
 const width = 8;
 const totalMoves = 30;
 
-let score = 0;
-let moves = totalMoves;
-
+const board = document.getElementById("board");
 const scoreDisplay = document.getElementById("score");
 const movesDisplay = document.getElementById("moves");
 
-/*
-====================================================
-ITEM TYPES
-Replace emojis later with image paths or CSS classes
-====================================================
-*/
-
-const candies = [
-  { emoji: "🍒", color: "#ef4444" },
-  { emoji: "🍋", color: "#facc15" },
-  { emoji: "🍇", color: "#8b5cf6" },
-  { emoji: "🍏", color: "#22c55e" },
-  { emoji: "🫐", color: "#3b82f6" },
-  { emoji: "🍊", color: "#f97316" }
-];
+let score = 0;
+let moves = totalMoves;
 
 let squares = [];
-let selectedSquare = null;
+let selectedTile = null;
 let isAnimating = false;
 
 /*
-====================================================
+=========================================
+GAME ITEMS
+Replace emojis later with:
+- Images
+- SVG
+- Sprites
+=========================================
+*/
+
+const items = [
+    {emoji:"🍒", color:"#ef4444"},
+    {emoji:"🍋", color:"#facc15"},
+    {emoji:"🍇", color:"#8b5cf6"},
+    {emoji:"🍏", color:"#22c55e"},
+    {emoji:"🫐", color:"#3b82f6"},
+    {emoji:"🍊", color:"#fb923c"}
+];
+
+/*
+=========================================
 CREATE BOARD
-====================================================
+=========================================
 */
 
-function createBoard() {
-  board.innerHTML = "";
-  squares = [];
+function createBoard(){
 
-  for (let i = 0; i < width * width; i++) {
+    board.innerHTML = "";
+    squares = [];
 
-    const tile = document.createElement("div");
-    tile.classList.add("tile");
+    for(let i=0;i<width*width;i++){
 
-    const randomCandy =
-      candies[Math.floor(Math.random() * candies.length)];
+        const tile = document.createElement("div");
+        tile.classList.add("tile");
 
-    tile.dataset.type = randomCandy.emoji;
-    tile.textContent = randomCandy.emoji;
-    tile.style.background = randomCandy.color;
+        const randomItem =
+            items[Math.floor(Math.random()*items.length)];
 
-    tile.setAttribute("draggable", true);
-    tile.setAttribute("data-id", i);
+        tile.dataset.type = randomItem.emoji;
+        tile.textContent = randomItem.emoji;
+        tile.style.background = randomItem.color;
 
-    board.appendChild(tile);
-    squares.push(tile);
-  }
+        tile.dataset.id = i;
 
-  removeStartingMatches();
-  addEvents();
-}
+        tile.addEventListener("click", ()=>handleTileClick(tile));
 
-/*
-====================================================
-REMOVE STARTING MATCHES
-====================================================
-*/
-
-function removeStartingMatches() {
-  let hasMatch = true;
-
-  while (hasMatch) {
-    hasMatch = false;
-
-    for (let i = 0; i < squares.length; i++) {
-      const matches = getMatchAt(i);
-
-      if (matches.length >= 3) {
-        hasMatch = true;
-
-        matches.forEach(index => {
-          const randomCandy =
-            candies[Math.floor(Math.random() * candies.length)];
-
-          squares[index].dataset.type = randomCandy.emoji;
-          squares[index].textContent = randomCandy.emoji;
-          squares[index].style.background = randomCandy.color;
-        });
-      }
+        board.appendChild(tile);
+        squares.push(tile);
     }
-  }
+
+    removeStartingMatches();
 }
 
 /*
-====================================================
-EVENTS
-====================================================
+=========================================
+REMOVE STARTING MATCHES
+=========================================
 */
 
-function addEvents() {
+function removeStartingMatches(){
 
-  squares.forEach(square => {
+    let found = true;
 
-    square.addEventListener("click", () => {
-      handleClick(square);
-    });
+    while(found){
 
-    // Drag support
-    square.addEventListener("dragstart", dragStart);
-    square.addEventListener("dragover", e => e.preventDefault());
-    square.addEventListener("drop", dragDrop);
-  });
+        found = false;
+
+        for(let i=0;i<squares.length;i++){
+
+            const matches = getMatchAt(i);
+
+            if(matches.length >= 3){
+
+                found = true;
+
+                matches.forEach(index=>{
+
+                    const randomItem =
+                        items[Math.floor(Math.random()*items.length)];
+
+                    squares[index].dataset.type = randomItem.emoji;
+                    squares[index].textContent = randomItem.emoji;
+                    squares[index].style.background = randomItem.color;
+                });
+            }
+        }
+    }
 }
 
 /*
-====================================================
-CLICK SWAP
-====================================================
+=========================================
+CLICK TO SWAP
+=========================================
 */
 
-function handleClick(square) {
+function handleTileClick(tile){
 
-  if (isAnimating || moves <= 0) return;
+    if(isAnimating || moves <= 0) return;
 
-  if (!selectedSquare) {
-    selectedSquare = square;
-    square.classList.add("selected");
-    return;
-  }
+    // First select
+    if(!selectedTile){
 
-  const firstId = parseInt(selectedSquare.dataset.id);
-  const secondId = parseInt(square.dataset.id);
+        selectedTile = tile;
+        tile.classList.add("selected");
+        return;
+    }
 
-  if (isAdjacent(firstId, secondId)) {
-    swapTiles(selectedSquare, square);
-  }
+    // Click same tile again
+    if(selectedTile === tile){
 
-  selectedSquare.classList.remove("selected");
-  selectedSquare = null;
+        selectedTile.classList.remove("selected");
+        selectedTile = null;
+        return;
+    }
+
+    const first = parseInt(selectedTile.dataset.id);
+    const second = parseInt(tile.dataset.id);
+
+    // Only adjacent
+    if(isAdjacent(first, second)){
+
+        swapTiles(selectedTile, tile);
+
+    }else{
+
+        // Select new tile
+        selectedTile.classList.remove("selected");
+        selectedTile = tile;
+        tile.classList.add("selected");
+        return;
+    }
+
+    selectedTile.classList.remove("selected");
+    selectedTile = null;
 }
 
 /*
-====================================================
-DRAG SUPPORT
-====================================================
+=========================================
+CHECK ADJACENT
+=========================================
 */
 
-let draggedSquare = null;
+function isAdjacent(a,b){
 
-function dragStart() {
-  draggedSquare = this;
-}
-
-function dragDrop() {
-  if (isAnimating || moves <= 0) return;
-
-  const from = parseInt(draggedSquare.dataset.id);
-  const to = parseInt(this.dataset.id);
-
-  if (isAdjacent(from, to)) {
-    swapTiles(draggedSquare, this);
-  }
+    return (
+        b === a-1 ||
+        b === a+1 ||
+        b === a-width ||
+        b === a+width
+    );
 }
 
 /*
-====================================================
-CHECK ADJACENCY
-====================================================
+=========================================
+SWAP TILES
+=========================================
 */
 
-function isAdjacent(a, b) {
-  return (
-    b === a - 1 ||
-    b === a + 1 ||
-    b === a - width ||
-    b === a + width
-  );
-}
+async function swapTiles(tile1, tile2){
 
-/*
-====================================================
-SWAP LOGIC
-====================================================
-*/
+    if(isAnimating) return;
 
-async function swapTiles(square1, square2) {
+    isAnimating = true;
 
-  if (isAnimating) return;
+    // Animation
+    tile1.style.transform = "scale(1.2)";
+    tile2.style.transform = "scale(1.2)";
 
-  isAnimating = true;
+    await sleep(120);
 
-  const tempType = square1.dataset.type;
-  const tempText = square1.textContent;
-  const tempBg = square1.style.background;
+    tile1.style.transform = "";
+    tile2.style.transform = "";
 
-  square1.dataset.type = square2.dataset.type;
-  square1.textContent = square2.textContent;
-  square1.style.background = square2.style.background;
+    // Swap data
+    swapData(tile1, tile2);
 
-  square2.dataset.type = tempType;
-  square2.textContent = tempText;
-  square2.style.background = tempBg;
+    const matches = findAllMatches();
 
-  const matches = findAllMatches();
+    // Invalid move
+    if(matches.length === 0){
 
-  if (matches.length === 0) {
-    // Swap back
-    setTimeout(() => {
+        await sleep(200);
 
-      const revertType = square1.dataset.type;
-      const revertText = square1.textContent;
-      const revertBg = square1.style.background;
+        swapData(tile1, tile2);
 
-      square1.dataset.type = square2.dataset.type;
-      square1.textContent = square2.textContent;
-      square1.style.background = square2.style.background;
-
-      square2.dataset.type = revertType;
-      square2.textContent = revertText;
-      square2.style.background = revertBg;
-
-      isAnimating = false;
-
-    }, 250);
-
-  } else {
+        isAnimating = false;
+        return;
+    }
 
     moves--;
     updateUI();
@@ -409,239 +403,277 @@ async function swapTiles(square1, square2) {
 
     isAnimating = false;
 
-    if (moves <= 0) {
-      endGame();
+    if(moves <= 0){
+        endGame();
     }
-  }
 }
 
 /*
-====================================================
-FIND MATCHES
-====================================================
+=========================================
+SWAP DATA
+=========================================
 */
 
-function getMatchAt(index) {
+function swapData(a,b){
 
-  const matched = [];
-  const type = squares[index].dataset.type;
+    const tempType = a.dataset.type;
+    const tempText = a.textContent;
+    const tempBg = a.style.background;
 
-  if (!type) return matched;
+    a.dataset.type = b.dataset.type;
+    a.textContent = b.textContent;
+    a.style.background = b.style.background;
 
-  // Horizontal
-  let rowMatches = [index];
-
-  let left = index - 1;
-  while (
-    left >= 0 &&
-    Math.floor(left / width) === Math.floor(index / width) &&
-    squares[left].dataset.type === type
-  ) {
-    rowMatches.push(left);
-    left--;
-  }
-
-  let right = index + 1;
-  while (
-    right < 64 &&
-    Math.floor(right / width) === Math.floor(index / width) &&
-    squares[right].dataset.type === type
-  ) {
-    rowMatches.push(right);
-    right++;
-  }
-
-  if (rowMatches.length >= 3) {
-    matched.push(...rowMatches);
-  }
-
-  // Vertical
-  let colMatches = [index];
-
-  let up = index - width;
-  while (
-    up >= 0 &&
-    squares[up].dataset.type === type
-  ) {
-    colMatches.push(up);
-    up -= width;
-  }
-
-  let down = index + width;
-  while (
-    down < 64 &&
-    squares[down].dataset.type === type
-  ) {
-    colMatches.push(down);
-    down += width;
-  }
-
-  if (colMatches.length >= 3) {
-    matched.push(...colMatches);
-  }
-
-  return [...new Set(matched)];
-}
-
-function findAllMatches() {
-
-  const matched = new Set();
-
-  for (let i = 0; i < squares.length; i++) {
-
-    const matches = getMatchAt(i);
-
-    matches.forEach(m => matched.add(m));
-  }
-
-  return [...matched];
+    b.dataset.type = tempType;
+    b.textContent = tempText;
+    b.style.background = tempBg;
 }
 
 /*
-====================================================
+=========================================
+GET MATCHES
+=========================================
+*/
+
+function getMatchAt(index){
+
+    const matched = [];
+    const type = squares[index].dataset.type;
+
+    if(!type) return matched;
+
+    /*
+    HORIZONTAL
+    */
+
+    let horizontal = [index];
+
+    let left = index - 1;
+
+    while(
+        left >= 0 &&
+        Math.floor(left/width) === Math.floor(index/width) &&
+        squares[left].dataset.type === type
+    ){
+        horizontal.push(left);
+        left--;
+    }
+
+    let right = index + 1;
+
+    while(
+        right < 64 &&
+        Math.floor(right/width) === Math.floor(index/width) &&
+        squares[right].dataset.type === type
+    ){
+        horizontal.push(right);
+        right++;
+    }
+
+    if(horizontal.length >= 3){
+        matched.push(...horizontal);
+    }
+
+    /*
+    VERTICAL
+    */
+
+    let vertical = [index];
+
+    let up = index - width;
+
+    while(
+        up >= 0 &&
+        squares[up].dataset.type === type
+    ){
+        vertical.push(up);
+        up -= width;
+    }
+
+    let down = index + width;
+
+    while(
+        down < 64 &&
+        squares[down].dataset.type === type
+    ){
+        vertical.push(down);
+        down += width;
+    }
+
+    if(vertical.length >= 3){
+        matched.push(...vertical);
+    }
+
+    return [...new Set(matched)];
+}
+
+/*
+=========================================
+FIND ALL MATCHES
+=========================================
+*/
+
+function findAllMatches(){
+
+    const matched = new Set();
+
+    for(let i=0;i<squares.length;i++){
+
+        const matches = getMatchAt(i);
+
+        matches.forEach(m=>matched.add(m));
+    }
+
+    return [...matched];
+}
+
+/*
+=========================================
 RESOLVE BOARD
-====================================================
+=========================================
 */
 
-async function resolveBoard() {
+async function resolveBoard(){
 
-  let matches = findAllMatches();
+    let matches = findAllMatches();
 
-  while (matches.length > 0) {
+    while(matches.length > 0){
 
-    // Add score
-    score += matches.length * 10;
+        score += matches.length * 10;
+        updateUI();
+
+        // Remove matches
+        matches.forEach(index=>{
+
+            squares[index].style.opacity = "0";
+            squares[index].dataset.type = "";
+        });
+
+        await sleep(250);
+
+        applyGravity();
+
+        await sleep(250);
+
+        matches = findAllMatches();
+    }
+}
+
+/*
+=========================================
+GRAVITY
+=========================================
+*/
+
+function applyGravity(){
+
+    for(let col=0;col<width;col++){
+
+        let column = [];
+
+        // Collect non empty
+        for(let row=width-1;row>=0;row--){
+
+            const index = row*width + col;
+
+            if(squares[index].dataset.type !== ""){
+
+                column.push({
+                    type:squares[index].dataset.type,
+                    text:squares[index].textContent,
+                    bg:squares[index].style.background
+                });
+            }
+        }
+
+        // Fill from bottom
+        for(let row=width-1;row>=0;row--){
+
+            const index = row*width + col;
+
+            if(column.length > 0){
+
+                const item = column.shift();
+
+                squares[index].dataset.type = item.type;
+                squares[index].textContent = item.text;
+                squares[index].style.background = item.bg;
+                squares[index].style.opacity = "1";
+
+            }else{
+
+                const randomItem =
+                    items[Math.floor(Math.random()*items.length)];
+
+                squares[index].dataset.type = randomItem.emoji;
+                squares[index].textContent = randomItem.emoji;
+                squares[index].style.background = randomItem.color;
+                squares[index].style.opacity = "1";
+            }
+        }
+    }
+}
+
+/*
+=========================================
+UPDATE UI
+=========================================
+*/
+
+function updateUI(){
+
+    scoreDisplay.textContent = score;
+    movesDisplay.textContent = moves;
+}
+
+/*
+=========================================
+GAME OVER
+=========================================
+*/
+
+function endGame(){
+
+    document.getElementById("finalScore").textContent = score;
+
+    document.getElementById("gameOver").style.display = "flex";
+}
+
+/*
+=========================================
+RESTART
+=========================================
+*/
+
+function restartGame(){
+
+    score = 0;
+    moves = totalMoves;
+
     updateUI();
 
-    // Remove matches
-    matches.forEach(index => {
-      squares[index].dataset.type = "";
-      squares[index].textContent = "";
-      squares[index].style.background = "transparent";
-      squares[index].classList.add("hidden");
-    });
+    document.getElementById("gameOver").style.display = "none";
 
-    await sleep(250);
+    selectedTile = null;
+    isAnimating = false;
 
-    applyGravity();
-
-    await sleep(250);
-
-    matches = findAllMatches();
-  }
+    createBoard();
 }
 
 /*
-====================================================
-GRAVITY
-====================================================
-*/
-
-function applyGravity() {
-
-  for (let col = 0; col < width; col++) {
-
-    let column = [];
-
-    // Collect non-empty
-    for (let row = width - 1; row >= 0; row--) {
-
-      const index = row * width + col;
-
-      if (squares[index].dataset.type !== "") {
-
-        column.push({
-          type: squares[index].dataset.type,
-          text: squares[index].textContent,
-          bg: squares[index].style.background
-        });
-      }
-    }
-
-    // Fill column bottom-up
-    for (let row = width - 1; row >= 0; row--) {
-
-      const index = row * width + col;
-
-      if (column.length > 0) {
-
-        const candy = column.shift();
-
-        squares[index].dataset.type = candy.type;
-        squares[index].textContent = candy.text;
-        squares[index].style.background = candy.bg;
-        squares[index].classList.remove("hidden");
-
-      } else {
-
-        const randomCandy =
-          candies[Math.floor(Math.random() * candies.length)];
-
-        squares[index].dataset.type = randomCandy.emoji;
-        squares[index].textContent = randomCandy.emoji;
-        squares[index].style.background = randomCandy.color;
-        squares[index].classList.remove("hidden");
-      }
-    }
-  }
-}
-
-/*
-====================================================
-UI
-====================================================
-*/
-
-function updateUI() {
-  scoreDisplay.textContent = score;
-  movesDisplay.textContent = moves;
-}
-
-/*
-====================================================
-GAME OVER
-====================================================
-*/
-
-function endGame() {
-
-  document.getElementById("finalScore").textContent = score;
-
-  document.getElementById("gameOver").style.display = "flex";
-}
-
-/*
-====================================================
-RESTART
-====================================================
-*/
-
-function restartGame() {
-
-  score = 0;
-  moves = totalMoves;
-
-  updateUI();
-
-  document.getElementById("gameOver").style.display = "none";
-
-  createBoard();
-}
-
-/*
-====================================================
+=========================================
 HELPER
-====================================================
+=========================================
 */
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+function sleep(ms){
+    return new Promise(resolve=>setTimeout(resolve,ms));
 }
 
 /*
-====================================================
+=========================================
 START GAME
-====================================================
+=========================================
 */
 
 createBoard();
