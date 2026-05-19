@@ -3,231 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Micro Mario in One File!</title>
+    <title>Ultimate IPL Fan Tester 😂</title>
     <style>
         body {
             margin: 0;
             padding: 0;
-            overflow: hidden;
-            background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 100%);
-            font-family: 'Courier New', Courier, monospace;
-        }
-        canvas {
-            display: block;
-            margin: 0 auto;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            background-color: transparent;
-        }
-        #ui {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
             text-align: center;
-            color: #333;
-            pointer-events: none;
+            overflow: hidden;
         }
-        h1 { margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; }
-        p { margin: 5px 0; font-weight: bold; }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            color: #ddd;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 30px;
+        }
+
+        button {
+            padding: 20px 40px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        button:hover {
+            transform: translateY(-5px) scale(1.05);
+        }
+
+        .csk-btn {
+            background: linear-gradient(45deg, #F9CD05, #FFD700);
+            color: #000;
+            border: 3px solid #00529B;
+        }
+
+        .csk-btn:hover {
+            box-shadow: 0 10px 30px rgba(249, 205, 5, 0.6);
+        }
+
+        .rcb-btn {
+            background: linear-gradient(45deg, #E32636, #8B0000);
+            color: #FFD700;
+            border: 3px solid #000;
+        }
+
+        .rcb-btn:hover {
+            box-shadow: 0 10px 30px rgba(227, 38, 54, 0.6);
+        }
+
+        /* Modal Styles */
+        #result-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        #emoji-display {
+            font-size: 8rem;
+            margin-bottom: 20px;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        #message-display {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .close-btn {
+            padding: 10px 30px;
+            font-size: 1.2rem;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Animations */
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .spin {
+            animation: spin 3s linear infinite;
+        }
+
+        .swing {
+            animation: swing 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes swing { 
+            0% { transform: rotate(-20deg); }
+            100% { transform: rotate(20deg); }
+        }
     </style>
 </head>
 <body>
 
-    <div id="ui">
-        <h1>Micro Mario</h1>
-        <p>Use Left/Right Arrows to Move & Up Arrow to Jump!</p>
-        <p id="message"></p>
+    <h1>🏏 The Ultimate Fan Reward 🏏</h1>
+    <p>Choose your favorite team to claim your ultimate prize!</p>
+
+    <div class="button-container">
+        <button class="csk-btn" onclick="showResult('csk')">💛 I am a CSK Fan</button>
+        <button class="rcb-btn" onclick="showResult('rcb')">❤️ I am an RCB Fan</button>
     </div>
 
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <!-- Hidden Popup Modal -->
+    <div id="result-modal">
+        <div id="emoji-display"></div>
+        <div id="message-display"></div>
+        <button class="close-btn" onclick="closeModal()">Play Again 🔄</button>
+    </div>
 
     <script>
-        (function() {
-            const canvas = document.getElementById("gameCanvas");
-            const ctx = canvas.getContext("2d");
-            const message = document.getElementById("message");
+        function showResult(team) {
+            const modal = document.getElementById('result-modal');
+            const emoji = document.getElementById('emoji-display');
+            const message = document.getElementById('message-display');
 
-            // Game variables
-            let width = canvas.width;
-            let height = canvas.height;
-            let friction = 0.8;
-            let gravity = 0.4;
-            let keys = [];
-            let gameOver = false;
-
-            // Player (Mario) object
-            const player = {
-                x: 50,
-                y: height - 100,
-                width: 30,
-                height: 30,
-                speed: 4,
-                velX: 0,
-                velY: 0,
-                jumping: false,
-                grounded: false
-            };
-
-            // Level Design (Platforms, Floor, Goal)
-            const boxes = [
-                // Ground
-                { x: 0, y: height - 40, width: width, height: 40, type: 'ground' },
-                // Platforms
-                { x: 200, y: 480, width: 120, height: 20, type: 'brick' },
-                { x: 400, y: 400, width: 120, height: 20, type: 'brick' },
-                { x: 150, y: 320, width: 80, height: 20, type: 'brick' },
-                { x: 300, y: 220, width: 100, height: 20, type: 'brick' },
-                { x: 500, y: 150, width: 150, height: 20, type: 'brick' },
-                // The Goal (Flag)
-                { x: 600, y: 110, width: 40, height: 40, type: 'goal' }
-            ];
-
-            // Keyboard listeners
-            document.body.addEventListener("keydown", function(e) {
-                keys[e.keyCode] = true;
-            });
-            document.body.addEventListener("keyup", function(e) {
-                keys[e.keyCode] = false;
-            });
-
-            // Collision detection function
-            function colCheck(shapeA, shapeB) {
-                let vX = (shapeA.x + (shapeA.width / 2)) - (shapeB.x + (shapeB.width / 2)),
-                    vY = (shapeA.y + (shapeA.height / 2)) - (shapeB.y + (shapeB.height / 2)),
-                    hWidths = (shapeA.width / 2) + (shapeB.width / 2),
-                    hHeights = (shapeA.height / 2) + (shapeB.height / 2),
-                    colDir = null;
-
-                if (Math.abs(vX) < hWidths && Math.abs(vY) < hHeights) {
-                    let oX = hWidths - Math.abs(vX),
-                        oY = hHeights - Math.abs(vY);
-                    if (oX >= oY) {
-                        if (vY > 0) {
-                            colDir = "t";
-                            shapeA.y += oY;
-                        } else {
-                            colDir = "b";
-                            shapeA.y -= oY;
-                        }
-                    } else {
-                        if (vX > 0) {
-                            colDir = "l";
-                            shapeA.x += oX;
-                        } else {
-                            colDir = "r";
-                            shapeA.x -= oX;
-                        }
-                    }
-                }
-                return colDir;
+            if (team === 'csk') {
+                emoji.innerHTML = "🍭";
+                emoji.className = "swing"; // Gives the lollipop a swinging animation
+                message.innerHTML = "Aww! 5 Trophies bohot ho gayi...<br>Ab chup chaap ye Lollipop khao! 🤣";
+                message.style.color = "#F9CD05";
+            } else if (team === 'rcb') {
+                emoji.innerHTML = "🏆";
+                emoji.className = "spin"; // Gives the trophy a glowing spin animation
+                message.innerHTML = "EE SALA CUP NAMDE! 😭❤️<br>Lo bhai, finally ek virtual trophy toh mil hi gayi! 🎉";
+                message.style.color = "#E32636";
             }
 
-            // Main game loop
-            function update() {
-                if (gameOver) return;
+            modal.style.display = "flex";
+        }
 
-                // Check keys
-                if (keys[38] || keys[87]) { // Up arrow or W
-                    if (!player.jumping && player.grounded) {
-                        player.jumping = true;
-                        player.grounded = false;
-                        player.velY = -10; // Jump strength
-                    }
-                }
-                if (keys[39] || keys[68]) { // Right arrow or D
-                    if (player.velX < player.speed) {
-                        player.velX++;
-                    }
-                }
-                if (keys[37] || keys[65]) { // Left arrow or A
-                    if (player.velX > -player.speed) {
-                        player.velX--;
-                    }
-                }
-
-                // Apply physics
-                player.velX *= friction;
-                player.velY += gravity;
-                player.grounded = false;
-
-                // Check collisions with level geometry
-                for (let i = 0; i < boxes.length; i++) {
-                    let dir = colCheck(player, boxes[i]);
-
-                    if (dir === "l" || dir === "r") {
-                        player.velX = 0;
-                        player.jumping = false;
-                    } else if (dir === "b") {
-                        player.grounded = true;
-                        player.jumping = false;
-                        
-                        // Check if it's the goal!
-                        if (boxes[i].type === 'goal') {
-                            message.innerHTML = "🎉 YOU WIN! AMAZING! 🎉";
-                            message.style.color = "green";
-                            gameOver = true;
-                        }
-                    } else if (dir === "t") {
-                        player.velY *= -1;
-                    }
-                }
-
-                if(player.grounded){
-                     player.velY = 0;
-                }
-
-                player.x += player.velX;
-                player.y += player.velY;
-
-                // Screen boundaries
-                if (player.x >= width - player.width) {
-                    player.x = width - player.width;
-                } else if (player.x <= 0) {
-                    player.x = 0;
-                }
-                
-                // Death pit (fall off bottom)
-                if (player.y >= height) {
-                    message.innerHTML = "💀 GAME OVER! Refresh to try again.";
-                    message.style.color = "red";
-                    gameOver = true;
-                }
-
-                // Render everything
-                ctx.clearRect(0, 0, width, height);
-
-                // Draw Boxes
-                for (let i = 0; i < boxes.length; i++) {
-                    if (boxes[i].type === 'ground') {
-                        ctx.fillStyle = "#654321"; // Brown ground
-                        ctx.fillRect(boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height);
-                        ctx.fillStyle = "#228B22"; // Green grass top
-                        ctx.fillRect(boxes[i].x, boxes[i].y, boxes[i].width, 10);
-                    } else if (boxes[i].type === 'brick') {
-                        ctx.fillStyle = "#B22222"; // Brick red
-                        ctx.fillRect(boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height);
-                        ctx.strokeStyle = "#000";
-                        ctx.strokeRect(boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height);
-                    } else if (boxes[i].type === 'goal') {
-                        ctx.fillStyle = "#FFD700"; // Gold block
-                        ctx.fillRect(boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height);
-                        ctx.fillStyle = "#FFF"; // Star center
-                        ctx.fillRect(boxes[i].x + 15, boxes[i].y + 15, 10, 10);
-                    }
-                }
-
-                // Draw Player (Red with blue overalls look)
-                ctx.fillStyle = "#FF0000"; // Red hat/shirt
-                ctx.fillRect(player.x, player.y, player.width, player.height - 10);
-                ctx.fillStyle = "#0000FF"; // Blue pants
-                ctx.fillRect(player.x, player.y + player.height - 10, player.width, 10);
-
-                requestAnimationFrame(update);
-            }
-
-            // Start the game!
-            update();
-        })();
+        function closeModal() {
+            const modal = document.getElementById('result-modal');
+            modal.style.display = "none";
+        }
     </script>
 </body>
 </html>
