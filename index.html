@@ -1,362 +1,233 @@
-# Graphic Flex Web Page (Single File)
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Graphic Flex Website</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins', sans-serif;
-}
-
-body{
-    background:#0f172a;
-    color:white;
-    overflow-x:hidden;
-}
-
-header{
-    width:100%;
-    min-height:100vh;
-    background:linear-gradient(135deg,#0f172a,#1e293b,#111827);
-    position:relative;
-    overflow:hidden;
-}
-
-nav{
-    width:100%;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:25px 8%;
-}
-
-.logo{
-    font-size:32px;
-    font-weight:700;
-    color:#38bdf8;
-}
-
-nav ul{
-    display:flex;
-    gap:30px;
-    list-style:none;
-}
-
-nav ul li a{
-    text-decoration:none;
-    color:white;
-    transition:0.3s;
-}
-
-nav ul li a:hover{
-    color:#38bdf8;
-}
-
-.hero{
-    width:100%;
-    min-height:80vh;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:0 8%;
-    flex-wrap:wrap;
-}
-
-.hero-text{
-    flex:1;
-    min-width:300px;
-    z-index:2;
-}
-
-.hero-text h1{
-    font-size:65px;
-    line-height:1.1;
-    margin-bottom:20px;
-}
-
-.hero-text span{
-    color:#38bdf8;
-}
-
-.hero-text p{
-    color:#cbd5e1;
-    font-size:18px;
-    max-width:550px;
-    margin-bottom:30px;
-}
-
-.buttons{
-    display:flex;
-    gap:20px;
-    flex-wrap:wrap;
-}
-
-.btn{
-    padding:14px 30px;
-    border:none;
-    border-radius:12px;
-    cursor:pointer;
-    font-size:16px;
-    transition:0.3s;
-}
-
-.btn-primary{
-    background:#38bdf8;
-    color:black;
-    font-weight:600;
-}
-
-.btn-secondary{
-    background:transparent;
-    border:2px solid #38bdf8;
-    color:white;
-}
-
-.btn:hover{
-    transform:translateY(-5px) scale(1.05);
-}
-
-.hero-image{
-    flex:1;
-    min-width:300px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    position:relative;
-}
-
-.circle{
-    width:400px;
-    height:400px;
-    border-radius:50%;
-    background:linear-gradient(135deg,#38bdf8,#8b5cf6);
-    position:absolute;
-    filter:blur(30px);
-    opacity:0.7;
-    animation:float 4s ease-in-out infinite;
-}
-
-.card{
-    width:320px;
-    background:rgba(255,255,255,0.08);
-    backdrop-filter:blur(10px);
-    border:1px solid rgba(255,255,255,0.1);
-    padding:30px;
-    border-radius:25px;
-    z-index:2;
-    box-shadow:0 10px 40px rgba(0,0,0,0.4);
-}
-
-.card h2{
-    font-size:30px;
-    margin-bottom:15px;
-}
-
-.card p{
-    color:#cbd5e1;
-    line-height:1.7;
-}
-
-.features{
-    padding:100px 8%;
-    background:#111827;
-}
-
-.section-title{
-    text-align:center;
-    margin-bottom:60px;
-}
-
-.section-title h2{
-    font-size:50px;
-}
-
-.section-title p{
-    color:#94a3b8;
-    margin-top:10px;
-}
-
-.feature-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:30px;
-}
-
-.feature-box{
-    background:#1e293b;
-    padding:35px;
-    border-radius:20px;
-    transition:0.3s;
-    border:1px solid rgba(255,255,255,0.08);
-}
-
-.feature-box:hover{
-    transform:translateY(-10px);
-    background:#243041;
-}
-
-.feature-box h3{
-    margin:20px 0;
-    color:#38bdf8;
-}
-
-.feature-box p{
-    color:#cbd5e1;
-    line-height:1.6;
-}
-
-.icon{
-    font-size:45px;
-}
-
-footer{
-    text-align:center;
-    padding:30px;
-    background:#0f172a;
-    color:#94a3b8;
-}
-
-@keyframes float{
-    0%{
-        transform:translateY(0px);
-    }
-
-    50%{
-        transform:translateY(-20px);
-    }
-
-    100%{
-        transform:translateY(0px);
-    }
-}
-
-@media(max-width:900px){
-
-    .hero{
-        flex-direction:column;
-        text-align:center;
-        gap:60px;
-        padding-top:50px;
-    }
-
-    .hero-text h1{
-        font-size:45px;
-    }
-
-    .buttons{
-        justify-content:center;
-    }
-
-    nav{
-        flex-direction:column;
-        gap:20px;
-    }
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Micro Mario in One File!</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 100%);
+            font-family: 'Courier New', Courier, monospace;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            background-color: transparent;
+        }
+        #ui {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: #333;
+            pointer-events: none;
+        }
+        h1 { margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; }
+        p { margin: 5px 0; font-weight: bold; }
+    </style>
 </head>
 <body>
 
-<header>
-
-    <nav>
-        <div class="logo">FlexUI</div>
-
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Contact</a></li>
-        </ul>
-    </nav>
-
-    <div class="hero">
-
-        <div class="hero-text">
-            <h1>Create Amazing <span>Graphic Websites</span></h1>
-
-            <p>
-                Modern responsive website with glassmorphism,
-                animations, gradients and flex layout using only
-                HTML + CSS.
-            </p>
-
-            <div class="buttons">
-                <button class="btn btn-primary">Get Started</button>
-                <button class="btn btn-secondary">Explore</button>
-            </div>
-        </div>
-
-        <div class="hero-image">
-            <div class="circle"></div>
-
-            <div class="card">
-                <h2>Creative UI</h2>
-
-                <p>
-                    Beautiful glowing effects, smooth hover animations,
-                    responsive flexbox layout and premium modern design.
-                </p>
-            </div>
-        </div>
-
+    <div id="ui">
+        <h1>Micro Mario</h1>
+        <p>Use Left/Right Arrows to Move & Up Arrow to Jump!</p>
+        <p id="message"></p>
     </div>
 
-</header>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
 
-<section class="features">
+    <script>
+        (function() {
+            const canvas = document.getElementById("gameCanvas");
+            const ctx = canvas.getContext("2d");
+            const message = document.getElementById("message");
 
-    <div class="section-title">
-        <h2>Features</h2>
-        <p>Modern design with amazing effects</p>
-    </div>
+            // Game variables
+            let width = canvas.width;
+            let height = canvas.height;
+            let friction = 0.8;
+            let gravity = 0.4;
+            let keys = [];
+            let gameOver = false;
 
-    <div class="feature-grid">
+            // Player (Mario) object
+            const player = {
+                x: 50,
+                y: height - 100,
+                width: 30,
+                height: 30,
+                speed: 4,
+                velX: 0,
+                velY: 0,
+                jumping: false,
+                grounded: false
+            };
 
-        <div class="feature-box">
-            <div class="icon">⚡</div>
-            <h3>Fast</h3>
-            <p>
-                Optimized layout with smooth performance and responsive design.
-            </p>
-        </div>
+            // Level Design (Platforms, Floor, Goal)
+            const boxes = [
+                // Ground
+                { x: 0, y: height - 40, width: width, height: 40, type: 'ground' },
+                // Platforms
+                { x: 200, y: 480, width: 120, height: 20, type: 'brick' },
+                { x: 400, y: 400, width: 120, height: 20, type: 'brick' },
+                { x: 150, y: 320, width: 80, height: 20, type: 'brick' },
+                { x: 300, y: 220, width: 100, height: 20, type: 'brick' },
+                { x: 500, y: 150, width: 150, height: 20, type: 'brick' },
+                // The Goal (Flag)
+                { x: 600, y: 110, width: 40, height: 40, type: 'goal' }
+            ];
 
-        <div class="feature-box">
-            <div class="icon">🎨</div>
-            <h3>Creative</h3>
-            <p>
-                Stylish graphics, glowing gradients and modern glass effects.
-            </p>
-        </div>
+            // Keyboard listeners
+            document.body.addEventListener("keydown", function(e) {
+                keys[e.keyCode] = true;
+            });
+            document.body.addEventListener("keyup", function(e) {
+                keys[e.keyCode] = false;
+            });
 
-        <div class="feature-box">
-            <div class="icon">📱</div>
-            <h3>Responsive</h3>
-            <p>
-                Works perfectly on mobile, tablet and desktop devices.
-            </p>
-        </div>
+            // Collision detection function
+            function colCheck(shapeA, shapeB) {
+                let vX = (shapeA.x + (shapeA.width / 2)) - (shapeB.x + (shapeB.width / 2)),
+                    vY = (shapeA.y + (shapeA.height / 2)) - (shapeB.y + (shapeB.height / 2)),
+                    hWidths = (shapeA.width / 2) + (shapeB.width / 2),
+                    hHeights = (shapeA.height / 2) + (shapeB.height / 2),
+                    colDir = null;
 
-    </div>
+                if (Math.abs(vX) < hWidths && Math.abs(vY) < hHeights) {
+                    let oX = hWidths - Math.abs(vX),
+                        oY = hHeights - Math.abs(vY);
+                    if (oX >= oY) {
+                        if (vY > 0) {
+                            colDir = "t";
+                            shapeA.y += oY;
+                        } else {
+                            colDir = "b";
+                            shapeA.y -= oY;
+                        }
+                    } else {
+                        if (vX > 0) {
+                            colDir = "l";
+                            shapeA.x += oX;
+                        } else {
+                            colDir = "r";
+                            shapeA.x -= oX;
+                        }
+                    }
+                }
+                return colDir;
+            }
 
-</section>
+            // Main game loop
+            function update() {
+                if (gameOver) return;
 
-<footer>
-    © 2026 FlexUI Website | Designed With HTML & CSS
-</footer>
+                // Check keys
+                if (keys[38] || keys[87]) { // Up arrow or W
+                    if (!player.jumping && player.grounded) {
+                        player.jumping = true;
+                        player.grounded = false;
+                        player.velY = -10; // Jump strength
+                    }
+                }
+                if (keys[39] || keys[68]) { // Right arrow or D
+                    if (player.velX < player.speed) {
+                        player.velX++;
+                    }
+                }
+                if (keys[37] || keys[65]) { // Left arrow or A
+                    if (player.velX > -player.speed) {
+                        player.velX--;
+                    }
+                }
 
+                // Apply physics
+                player.velX *= friction;
+                player.velY += gravity;
+                player.grounded = false;
+
+                // Check collisions with level geometry
+                for (let i = 0; i < boxes.length; i++) {
+                    let dir = colCheck(player, boxes[i]);
+
+                    if (dir === "l" || dir === "r") {
+                        player.velX = 0;
+                        player.jumping = false;
+                    } else if (dir === "b") {
+                        player.grounded = true;
+                        player.jumping = false;
+                        
+                        // Check if it's the goal!
+                        if (boxes[i].type === 'goal') {
+                            message.innerHTML = "🎉 YOU WIN! AMAZING! 🎉";
+                            message.style.color = "green";
+                            gameOver = true;
+                        }
+                    } else if (dir === "t") {
+                        player.velY *= -1;
+                    }
+                }
+
+                if(player.grounded){
+                     player.velY = 0;
+                }
+
+                player.x += player.velX;
+                player.y += player.velY;
+
+                // Screen boundaries
+                if (player.x >= width - player.width) {
+                    player.x = width - player.width;
+                } else if (player.x <= 0) {
+                    player.x = 0;
+                }
+                
+                // Death pit (fall off bottom)
+                if (player.y >= height) {
+                    message.innerHTML = "💀 GAME OVER! Refresh to try again.";
+                    message.style.color = "red";
+                    gameOver = true;
+                }
+
+                // Render everything
+                ctx.clearRect(0, 0, width, height);
+
+                // Draw Boxes
+                for (let i = 0; i < boxes.length; i++) {
+                    if (boxes[i].type === 'ground') {
+                        ctx.fillStyle = "#654321"; // Brown ground
+                        ctx.fillRect(boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height);
+                        ctx.fillStyle = "#228B22"; // Green grass top
+                        ctx.fillRect(boxes[i].x, boxes[i].y, boxes[i].width, 10);
+                    } else if (boxes[i].type === 'brick') {
+                        ctx.fillStyle = "#B22222"; // Brick red
+                        ctx.fillRect(boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height);
+                        ctx.strokeStyle = "#000";
+                        ctx.strokeRect(boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height);
+                    } else if (boxes[i].type === 'goal') {
+                        ctx.fillStyle = "#FFD700"; // Gold block
+                        ctx.fillRect(boxes[i].x, boxes[i].y, boxes[i].width, boxes[i].height);
+                        ctx.fillStyle = "#FFF"; // Star center
+                        ctx.fillRect(boxes[i].x + 15, boxes[i].y + 15, 10, 10);
+                    }
+                }
+
+                // Draw Player (Red with blue overalls look)
+                ctx.fillStyle = "#FF0000"; // Red hat/shirt
+                ctx.fillRect(player.x, player.y, player.width, player.height - 10);
+                ctx.fillStyle = "#0000FF"; // Blue pants
+                ctx.fillRect(player.x, player.y + player.height - 10, player.width, 10);
+
+                requestAnimationFrame(update);
+            }
+
+            // Start the game!
+            update();
+        })();
+    </script>
 </body>
 </html>
-```
